@@ -12,7 +12,7 @@ If you start your homescreen webapp in landscape mode, the status bar can be stu
 If you use setTimeout/setInterval/requestAnimationFrame/XMLHttpRequest after the lockscreen is shown, those functions will not work again.  Additionally, overflowchanged/resize events will no longer fire and if the keyboard is displayed when a worker.postMessage is called, all of your workers will permenantly terminate (and you will be unable to restart them).  
 
 This fix addresses only setTimeout/setInterval/requestAnimationFrame/XMLHttpRequest and keyboard/worker functionality.
-To fix resize events you will need to modify your code accordingly and perhaps override your frameworks in certain areas (SenchaTouch - we changed paintMonitor to relay on CssAnimation only).  There is more information at the end of this readme on what you currently need to address..
+To fix resize events you will need to modify your code accordingly and perhaps override your frameworks in certain areas (SenchaTouch - we changed paintMonitor to rely on CssAnimation only).  There is more information at the end of this readme on what you currently need to address..
 
 ######How to add the fix:
 - Add `<script src="fixes.js></script>` to your index.html.  This needs to be the very first script included as it will override XMLHttpRequest, Worker, setTimeout, setInterval, requestAnimationFrame, webkitRequestAnimationFrame and the clear functions.
