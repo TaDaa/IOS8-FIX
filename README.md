@@ -21,6 +21,7 @@ To fix resize events you will need to modify your code accordingly and perhaps o
 - If you use web workers in your application, make sure that you only use `addEventListener` to attach the 'message' listener.  Worker implementation is overriden in the fix so that all workers can be paused without requiring heavily modified Worker code.
 
 ###Other Notes:
+- Synchronous XMLHttpRequests are not addressed. Only Async is included.  If you are using anything that depends on require/syncRequire you will need to hook the fixes into your application appropriately.  Consider pre/post build as well if you have a minificiation process (we have no syncRequire dependencies after our build process is complete)
 - Remove webkitTransition opacity  from your application, as it will cause non-selectable areas after sleep mode has occurred..
 - Rework resize/overflowchange logic as these events will not work after sleep mode.  Most resize listeners can probably be moved to orientationchange or hooked directly into other functions.  For example, Sencha Touch depended on overflowchange in the scroller, we moved the height calculations into onTouchStart for the scroller.
 - Spam opening the keyboard may break Workers, you can try tweaking the timing of `handleKeyboardFocus()`
