@@ -2,7 +2,7 @@
 If you start your homescreen webapp in landscape mode, the status bar can be stuck in overlapping state.
 
 - Add
-  `<script>window.initial_orientation</script><script src="fixes.js></script>`
+  `<script>window.initial_orientation=orientation</script><script src="fixes.js></script>`
   to the very start of your index.html (just after DOCTYPE if you are using it).  Needs to be at the very start because orientation can change while the page is loading.
 - Include fixes.js and comment out `fixSleepMode()` (unless you are also including the sleep mode fix)
 - Modify body styling and framework/application overrides accordingly (for sencha touch you will need to override a number of a functions, I can provide the necessary ones for 2.3.1 if anyone needs them)
