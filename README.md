@@ -26,4 +26,4 @@ To fix resize events you will need to modify your code accordingly and perhaps o
 - Spam opening the keyboard may break Workers, you can try tweaking the timing of `handleKeyboardFocus()`
 - Window Bouncing/Panning can cause workers to permenantly die, this has been prevented by `window.addEventListener('touchmove,function (e) {e.preventDefault})`
 
-WE are using this in a fairly large/complex application that depends heavily on animations and ajax requests without issues.  But let me know if you encounter any bugs or other issues.
+We are using this in a fairly large/complex application that depends heavily on animations and ajax requests without issues.  But let me know if you encounter any bugs or other issues.
