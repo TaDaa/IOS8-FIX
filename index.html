@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<script>
+	//THIS IS TO DETECT IOS8 STATUS_BAR ISSUE (only occurs if application started in landscape)
+	window.initial_orientation = window.orientation;
+</script>
+<script src="fixes.js?version=${jenkins.bld.num}""></script>
+<html style="height:100%;width:100%;overflow:hidden" >
+<head>
+	<meta name="viewport" content="width=device-width,  target-densityDpi=device-dpi, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="apple-touch-fullscreen" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<style>
+		body {
+			text-align:center;
+			font-family:Arial;
+			font-size:large;
+			margin:0;
+			padding:0;
+			width:100%;
+		}
+		input {
+			vertical-align:middle;
+			height:50px;
+		}
+		.box-wrapper {
+			display:inline-block;
+			width:450px;
+			position:relative;
+			margin-top:150px;
+			vertical-align:middle;
+			height:400px
+		}
+		.box {
+			display:inline-block;
+			vertical-align:middle;
+			position:relative;
+			height:140px;
+			width:200px;
+			border:solid 1px steelblue;
+		}
+		.description {
+			height:30px;
+			padding-top:0.5em;
+			background-color:steelblue;
+			color:white;
+			text-shadow:0px -1px black;
+			text-align:center;
+		}
+		.value {
+			height:70px;
+			background-color:white;
+			color:steelblue;
+			padding-top:1.0em;
+			text-align:center;
+		}
+	</style>
+	<script>
+		document.addEventListener('DOMContentLoaded',runTests);
+		function runTests () {
+
+			!function IntervalAndAjaxTest () {
+				var intervalValue = document.getElementById('interval-value'),
+				ajaxValue = document.getElementById('ajax-value'),
+				interval_count = 0,
+				ajax_count = 0,
+				xhr;
+				setInterval(function () {
+					intervalValue.innerHTML = interval_count++;
+					xhr = new XMLHttpRequest();
+					xhr.open('get','index.html');
+					xhr.onreadystatechange = function () {
+						ajaxValue.innerHTML = ajax_count++;
+					}
+					xhr.send();
+				},2000);
+			}();
+			!function AnimationTest () {
+				var animationValue = document.getElementById('animation-value');
+				animation_count = 0,
+				requestFrame = requestAnimationFrame || webkitRequestAnimationFrame;
+				requestFrame(function onFrame () {
+					animationValue.innerHTML = animation_count++;
+					requestAnimationFrame(onFrame);
+				})
+			}();
+			!function TimeoutTest () {
+				var timeoutValue = document.getElementById('timeout-value');
+				timeout_count = 0,
+				setTimeout(function onTimeout () {
+					timeoutValue.innerHTML = timeout_count++;
+					setTimeout(onTimeout,2000);
+				},2000);
+			}();
+
+			Array.prototype.forEach.call(document.querySelectorAll('input'),function (input) {
+				input.willPauseWorkers();
+			});
+		}
+
+	</script>
+</head>
+<body class="splash" style="height:100%;overflow:hidden;" id="theBody">
+	<input placeholder="Open keyboard after sleep mode to test workers still running"></input>
+	<input placeholder="For tab stop"></input>
+	<div class="box-wrapper">
+	<div class="box">
+		<div class="description">Interval</div>
+		<div id="interval-value" class="value">0</div>
+	</div>
+	<div class="box">
+		<div class="description">Timeout</div>
+		<div id="timeout-value" class="value">0</div>
+	</div>
+	<div class="box">
+		<div class="description">Animation Frame</div>
+		<div id="animation-value" class="value">0</div>
+	</div>
+	<div class="box">
+		<div class="description">Ajax</div>
+		<div id="ajax-value" class="value">0</div>
+	</div>
+	</div>
+</body>
