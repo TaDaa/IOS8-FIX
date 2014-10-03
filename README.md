@@ -17,7 +17,7 @@ To fix resize events you will need to modify your code accordingly and perhaps o
 ######How to add the fix:
 - Add `<script src="fixes.js></script>` to your index.html.  This needs to be the very first script included as it will override XMLHttpRequest, Worker, setTimeout, setInterval, requestAnimationFrame, webkitRequestAnimationFrame and the clear functions.
 - Modify overrideFramework/overrideApplication functions accordingly.
-- Any input/contenteditable element in your application will need to make a call `this.willPauseWorkers()` so that Workers will disable when keyboard is opened.  **IMPORTANT you may need to modify overrideBrowser based on how you use input fields.  The solution in there will not work for everything.  The gist of what you need to accomplish is to force anything that opens the keyboard to call the `focus()` function that has been overridden
+- Any input/contenteditable element in your application will need to make a call `this.willPauseWorkers()` after the element has a parent, so that Workers will disable when keyboard is opened.  **IMPORTANT you may need to modify overrideBrowser based on how you use input fields.  The solution in there will not work for everything.  The gist of what you need to accomplish is to force anything that opens the keyboard to call the `focus()` function that has been overridden  You may need to modify the styling and focus logic here depending on your frameworks.` 
 - If you use web workers in your application, make sure that you only use `addEventListener` to attach the 'message' listener.  Worker implementation is overriden in the fix so that all workers can be paused without requiring heavily modified Worker code.
 
 ###Other Notes:
