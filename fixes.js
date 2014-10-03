@@ -12,7 +12,6 @@ if (isMobile && isMobile.length >= 2) {
 }
 
 
-IOS8();
 function IOS8 () {
 	IOS8 = function () {};
 	var state = {},
