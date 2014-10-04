@@ -3,7 +3,7 @@
 		var map = {},
 		clearWrapper = function (id) {
 			delete map[id];
-			return clear[id];
+			return clear(id);
 		};
 		self[clear] = clearWrapper;
 		clear = self[clear];
