@@ -1,12 +1,13 @@
 !function initialize () {
 	var create = function (create,clear,diffdate,deleteFromMap) {
 		var map = {},
+		clearFn = self[clear],
 		clearWrapper = function (id) {
 			delete map[id];
 			return clear(id);
 		};
 		self[clear] = clearWrapper;
-		clear = self[clear];
+		clear = clearFn;
 		create = self[create];
 
 		function accessor (fn,time) {
