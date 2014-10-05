@@ -80,7 +80,7 @@
 				requestFrame = requestAnimationFrame || webkitRequestAnimationFrame;
 				requestFrame(function onFrame () {
 					animationValue.innerHTML = animation_count++;
-					requestAnimationFrame(onFrame);
+					requestFrame(onFrame);
 				})
 			}();
 			!function TimeoutTest () {
