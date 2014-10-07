@@ -28,3 +28,108 @@ To fix resize events you will need to modify your code accordingly and perhaps o
 - Window Bouncing/Panning can cause workers to permenantly die, this has been prevented by `window.addEventListener('touchmove,function (e) {e.preventDefault})`
 
 We are using this in a fairly large/complex application that depends heavily on animations and ajax requests without issues.  But let me know if you encounter any bugs or other issues.
+
+========================
+###Sencha Touch 2.3.1 framework overrides
+Here are the overrideFramework functions for Sencha Touch 2.3.1.   If you have any other components that display custom pickers instead of the keyboard and backed by an input field, add the is_select=true flag to the component's prototype.
+
+####Status Bar
+```
+function overrideFramework () 
+{
+      var viewport_prototype = Ext.viewport.Default.prototype;
+			var onReady = viewport_prototype.onReady;
+			viewport_prototype.onReady = function () {
+				var me = this;
+				onReady.apply(this,arguments);
+				setTimeout(function () {
+					var style = me.element.dom.style;
+					style.setProperty('position','absolute','important');
+					style.setProperty('top','20px','important');
+					style.setProperty('height','auto','important');
+					style.setProperty('bottom','0px','important');
+				});
+			};
+			viewport_prototype.doSetHeight = function () {};
+			viewport_prototype.scrollToTop = function () {};
+			viewport_prototype.maximize = function () {};
+			viewport_prototype.doAutoMaximizeOnReady = function () {};
+			viewport_prototype.doAutoMaximize = function () {};
+			viewport_prototype.doAutoMaximizeOnOrientationChange = function () {};
+			Ext.viewport.Ios.prototype.setViewportSizeToAbsolute = function () {};
+			Ext.viewport.Ios.prototype.getWindowHeight = function () {
+				return window.innerHeight-20;
+			}
+}
+
+```
+####Sleep Mode
+```
+function overrideFramework () {
+			Ext.util.PaintMonitor.prototype.constructor = function (config) {
+				return new Ext.util.paintmonitor.CssAnimation(config);
+			};
+			var inputInitElement = Ext.field.Input.prototype.initElement;
+			Ext.Decorator.prototype.applyComponent = function (config) {
+				config.owner = this;
+				config = Ext.factory(config,Ext.Component);
+				return config;
+			};
+			var ods = Ext.scroll.Scroller.prototype.onTouchStart;
+			Ext.scroll.Scroller.prototype.onTouchStart = function () {
+				var container = this.getContainer(),
+				element = this.getElement(),
+				box;
+				if (container && container.dom) {
+					box = container.dom.getBoundingClientRect();
+					this.setContainerSize({
+						'x' : box.width,
+						'y' : box.height
+					});
+				} 
+				if (element) {
+					box = element.dom.getBoundingClientRect();
+					this.setSize({
+						'x' : box.width,
+						'y' : box.height
+					});
+				}
+				ods.apply(this,arguments);
+			};
+			Ext.field.Select.prototype.is_select =  Ext.field.DatePicker.prototype.is_select = true;
+			Ext.field.Input.prototype.initElement = function () {
+				var inputDom;
+				if (this.initialConfig && this.initialConfig.owner) {
+					if (this.initialConfig.owner.is_select) {
+						return inputInitElement.call(this);
+					}
+				}
+				inputInitElement.call(this);
+				inputDom = this.input && this.input.dom;
+				if (!inputDom) {
+					inputDom = this.element.dom.querySelector('input');
+					if (!inputDom) {
+						return undefined;
+					}
+				}
+				inputDom.style.setProperty('border-width','0px','important');
+				inputDom.style.setProperty('box-sizing','border-box','important');
+				inputDom.willPauseWorkers(false);
+				inputDom.parentNode._inputWrapper = true;
+				inputDom.parentNode.style.setProperty('width','100%','!important');
+				new Ext.Element(inputDom.parentNode).on('tap',function () {
+					inputDom.focus();
+				});
+				return undefined;
+			};
+			Ext.field.Select.prototype.is_select = Ext.field.DatePicker = true;
+			Ext.viewport.Default.prototype.doBlurInput = function (e) {
+				var target = e.target,
+				focusedElement = this.focusedElement;
+				if (focusedElement && focusedElement.nodeName.toUpperCase() != 'BODY' && (!target._inputWrapper && !this.isInputRegex.test(target.tagName))) {
+					delete this.focusedElement;
+					focusedElement.blur();
+				}
+			}
+}
+```
