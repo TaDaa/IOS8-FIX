@@ -116,7 +116,7 @@ function overrideFramework () {
 				inputDom.style.setProperty('box-sizing','border-box','important');
 				inputDom.willPauseWorkers(false);
 				inputDom.parentNode._inputWrapper = true;
-				inputDom.parentNode.style.setProperty('width','100%','!important');
+				inputDom.parentNode.style.setProperty('width','100%','important');
 				new Ext.Element(inputDom.parentNode).on('tap',function () {
 					inputDom.focus();
 				});
