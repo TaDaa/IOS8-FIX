@@ -123,7 +123,6 @@ function overrideFramework () {
 				});
 				return undefined;
 			};
-			Ext.field.Select.prototype.is_select = Ext.field.DatePicker = true;
 			Ext.viewport.Default.prototype.doBlurInput = function (e) {
 				var target = e.target,
 				focusedElement = this.focusedElement;
