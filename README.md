@@ -1,3 +1,15 @@
+####Apple has fixed the sleep mode issue as of IOS8.1.1 .
+Keeping the fix here in case Apple reintroduces the same bug or if anyone needs to specifically target 8.0 -> 8.1.1.
+
+
+
+
+
+
+
+
+
+
 ###Status Bar:
 If you start your homescreen webapp in landscape mode, the status bar can be stuck in overlapping state.
 
